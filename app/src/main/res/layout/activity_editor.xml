@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.activities.EditorActivity">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary"/>
+
+        <EditText
+            android:id="@+id/noteTitleField"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:hint="@string/note_name_hint"
+            android:layout_gravity="center|left"
+            android:layout_marginLeft="12dp"
+            android:textSize="20dp"
+            android:textColorHint="@color/white"
+            android:textColor="@color/white"/>
+
+        <ImageView
+            android:id="@+id/saveButton"
+            android:layout_width="32dp"
+            android:layout_height="56dp"
+            android:src="@drawable/ic_save_48dp"
+            android:layout_gravity="center|right"
+            android:layout_marginRight="8dp" />
+
+        <ImageView
+            android:id="@+id/updateButton"
+            android:layout_width="32dp"
+            android:layout_height="56dp"
+            android:src="@drawable/ic_update_48dp"
+            android:visibility="gone"
+            android:layout_gravity="center|right"
+            android:layout_marginRight="8dp" />
+
+    </FrameLayout>
+
+    <EditText
+        android:id="@+id/noteField"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@null"
+        android:inputType="textMultiLine"
+        android:hint="@string/note_text_hint"
+        android:gravity="top|left"
+        android:textSize="16dp"
+        android:padding="8dp"/>
+
+</LinearLayout>
