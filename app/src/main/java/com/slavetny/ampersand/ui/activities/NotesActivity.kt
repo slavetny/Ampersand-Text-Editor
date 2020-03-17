@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.slavetny.ampersand.NotesApp
 import com.slavetny.ampersand.NotesContract
 import com.slavetny.ampersand.R
 import com.slavetny.ampersand.db.Note
@@ -15,25 +16,29 @@ import com.slavetny.ampersand.presenter.NotesPresenter
 import com.slavetny.ampersand.ui.adapters.NotesAdapter
 import kotlinx.android.synthetic.main.activity_notes.*
 
-class NotesActivity : AppCompatActivity(), NotesContract.NotesView.MenuView, NotesAdapter.OnNoteClickedListener {
+class NotesActivity : AppCompatActivity(), NotesContract.NotesView.MenuView, NotesAdapter.OnNoteClickedListener, View.OnClickListener {
 
     private var presenter: NotesPresenter? = null
     private lateinit var linearLayoutManager: LinearLayoutManager
+    private var notesApp: NotesApp? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        notesApp = NotesApp()
+
+        if (notesApp?.get()?.getTheme(this) == true)
+            setTheme(R.style.DarkTheme)
+        else
+            setTheme(R.style.WhiteTheme)
+
         setContentView(R.layout.activity_notes)
 
         presenter = NotesPresenter(this, this)
         presenter?.getNotes()
 
-        addNoteButton.setOnClickListener {
-            startActivity(Intent(this, EditorActivity::class.java))
-
-            finish()
-
-            overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-        }
+        addNoteButton.setOnClickListener(this)
+        darkModeButton.setOnClickListener(this)
     }
 
     override fun showNotes(notesList: List<Note>?) {
@@ -43,8 +48,9 @@ class NotesActivity : AppCompatActivity(), NotesContract.NotesView.MenuView, Not
         recyclerView.layoutManager = linearLayoutManager
         recyclerView.adapter = adapter
 
-        adapter?.setOnNoteClickedListener(this)
         initRecyclerViewSwipe(adapter, recyclerView, notesList)
+
+        adapter?.setOnNoteClickedListener(this)
     }
 
     override fun noteClicked(title: String?) {
@@ -71,6 +77,33 @@ class NotesActivity : AppCompatActivity(), NotesContract.NotesView.MenuView, Not
 
         val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
         itemTouchHelper.attachToRecyclerView(recyclerView)
+    }
+
+    override fun onClick(v: View?) {
+        when (v?.id) {
+
+            R.id.addNoteButton -> {
+                startActivity(Intent(this, EditorActivity::class.java))
+
+                finish()
+
+                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+            }
+
+            R.id.darkModeButton -> {
+                if (notesApp?.get()?.getTheme(this) == false)
+                    notesApp!!.get()?.setTheme(this, true)
+                else
+                    notesApp!!.get()?.setTheme(this, false)
+
+                finish()
+
+                startActivity(Intent(this, NotesActivity::class.java))
+
+                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+            }
+
+        }
     }
 
     override fun onResume() {

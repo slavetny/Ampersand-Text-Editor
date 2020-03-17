@@ -14,7 +14,7 @@
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorPrimary"/>
+            android:background="?attr/colorPrimary"/>
 
         <EditText
             android:id="@+id/noteTitleField"
@@ -23,6 +23,7 @@
             android:background="@null"
             android:hint="@string/note_name_hint"
             android:layout_gravity="center|left"
+            android:textStyle="bold"
             android:layout_marginLeft="12dp"
             android:textSize="20dp"
             android:textColorHint="@color/white"
@@ -31,7 +32,7 @@
         <ImageView
             android:id="@+id/saveButton"
             android:layout_width="32dp"
-            android:layout_height="56dp"
+            android:layout_height="wrap_content"
             android:src="@drawable/ic_save_48dp"
             android:layout_gravity="center|right"
             android:layout_marginRight="8dp" />
@@ -45,6 +46,8 @@
         android:background="@null"
         android:inputType="textMultiLine"
         android:hint="@string/note_text_hint"
+        android:textColor="?attr/textsColor"
+        android:textColorHint="?attr/textsColor"
         android:gravity="top|left"
         android:textSize="16dp"
         android:padding="8dp"/>

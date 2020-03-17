@@ -15,6 +15,8 @@ class NotesAdapter(var notesList: List<Note>?) : RecyclerView.Adapter<NotesAdapt
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotesViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.note_item, parent, false)
 
+
+
         return NotesViewHolder(view)
     }
 
@@ -23,6 +25,8 @@ class NotesAdapter(var notesList: List<Note>?) : RecyclerView.Adapter<NotesAdapt
     }
 
     override fun onBindViewHolder(holder: NotesViewHolder, position: Int) {
+        holder.itemView.context.setTheme(R.style.DarkTheme)
+
         holder.bind(notesList!!.get(position))
 
         holder.itemView.setOnClickListener {

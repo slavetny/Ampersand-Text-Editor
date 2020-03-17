@@ -20,7 +20,7 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="@color/colorPrimary"/>
+                android:background="?attr/colorPrimary"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -30,6 +30,14 @@
                 android:textColor="@color/white"
                 android:textSize="20dp"
                 android:layout_gravity="center"/>
+
+            <ImageView
+                android:id="@+id/darkModeButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_darkmode_32dp"
+                android:layout_gravity="center|right"
+                android:layout_marginRight="8dp"/>
 
         </FrameLayout>
 
@@ -51,7 +59,7 @@
         android:layout_width="72dp"
         android:layout_height="72dp"
         android:layout_gravity="bottom|right"
-        app:cb_color="@color/colorAccent"
+        app:cb_color="?attr/colorAccent"
         app:cb_pressedRingWidth="8dp"
         android:src="@drawable/ic_add_32dp"
         android:layout_margin="16dp"/>
