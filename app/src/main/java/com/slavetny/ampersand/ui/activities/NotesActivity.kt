@@ -1,15 +1,17 @@
 package com.slavetny.ampersand.ui.activities
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.slavetny.ampersand.NotesContract
 import com.slavetny.ampersand.R
 import com.slavetny.ampersand.db.Note
-import com.slavetny.ampersand.mvp.NotesContract
-import com.slavetny.ampersand.mvp.presenter.NotesPresenter
+import com.slavetny.ampersand.presenter.NotesPresenter
 import com.slavetny.ampersand.ui.adapters.NotesAdapter
 import kotlinx.android.synthetic.main.activity_notes.*
 
@@ -28,6 +30,8 @@ class NotesActivity : AppCompatActivity(), NotesContract.NotesView.MenuView, Not
         addNoteButton.setOnClickListener {
             startActivity(Intent(this, EditorActivity::class.java))
 
+            finish()
+
             overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
         }
     }
@@ -39,11 +43,34 @@ class NotesActivity : AppCompatActivity(), NotesContract.NotesView.MenuView, Not
         recyclerView.layoutManager = linearLayoutManager
         recyclerView.adapter = adapter
 
-        adapter.setOnNoteClickedListener(this)
+        adapter?.setOnNoteClickedListener(this)
+        initRecyclerViewSwipe(adapter, recyclerView, notesList)
     }
 
     override fun noteClicked(title: String?) {
         startActivity(Intent(this, EditorActivity::class.java).putExtra("title", title))
+
+        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+    }
+
+    private fun initRecyclerViewSwipe(adapter: NotesAdapter, recyclerView: RecyclerView, notesList: List<Note>?) {
+
+        val simpleItemTouchCallback: ItemTouchHelper.SimpleCallback = object :
+            ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT or ItemTouchHelper.DOWN or ItemTouchHelper.UP) {
+
+            override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean { Toast.makeText(this@NotesActivity, "on Move", Toast.LENGTH_SHORT).show()
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
+                val position = viewHolder.adapterPosition
+
+                presenter?.removeNote(notesList!!.get(position).title)
+            }
+        }
+
+        val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
+        itemTouchHelper.attachToRecyclerView(recyclerView)
     }
 
     override fun onResume() {

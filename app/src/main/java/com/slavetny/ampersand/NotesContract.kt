@@ -1,6 +1,5 @@
-package com.slavetny.ampersand.mvp
+package com.slavetny.ampersand
 
-import android.content.Context
 import com.slavetny.ampersand.db.Note
 
 interface NotesContract {
@@ -23,11 +22,15 @@ interface NotesContract {
 
         }
 
+        fun initDatabase()
+
         fun getNotesFromDb(onFinishedListener: OnNotesFinishedListener)
 
         fun getNoteByTitle(onFinishedListener: OnNoteFinishedListener, title: String)
 
         fun addNote(title: String, text: String)
+
+        fun deleteNote(title: String)
 
     }
 
@@ -36,6 +39,8 @@ interface NotesContract {
         interface MenuPresenter {
 
             fun getNotes()
+
+            fun removeNote(title: String)
 
         }
 

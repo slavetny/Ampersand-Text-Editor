@@ -1,10 +1,10 @@
-package com.slavetny.ampersand.mvp.presenter
+package com.slavetny.ampersand.presenter
 
 import android.content.Context
 import android.util.Log
 import com.slavetny.ampersand.db.Note
-import com.slavetny.ampersand.mvp.NotesContract
-import com.slavetny.ampersand.mvp.NotesModel
+import com.slavetny.ampersand.NotesContract
+import com.slavetny.ampersand.NotesModel
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
@@ -15,7 +15,17 @@ class NotesPresenter(val view: NotesContract.NotesView.MenuView, var context: Co
     override fun getNotes() {
         notesModel = NotesModel(context)
 
+        notesModel?.initDatabase()
+
         notesModel?.getNotesFromDb(this)
+    }
+
+    override fun removeNote(title: String) {
+        notesModel = NotesModel(context)
+
+        notesModel?.initDatabase()
+
+        notesModel?.deleteNote(title)
     }
 
     override fun onNotesFinished(notesList: List<Note>?) {

@@ -36,15 +36,6 @@
             android:layout_gravity="center|right"
             android:layout_marginRight="8dp" />
 
-        <ImageView
-            android:id="@+id/updateButton"
-            android:layout_width="32dp"
-            android:layout_height="56dp"
-            android:src="@drawable/ic_update_48dp"
-            android:visibility="gone"
-            android:layout_gravity="center|right"
-            android:layout_marginRight="8dp" />
-
     </FrameLayout>
 
     <EditText

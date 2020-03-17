@@ -8,9 +8,8 @@ import android.view.View
 import android.widget.Toast
 import com.slavetny.ampersand.R
 import com.slavetny.ampersand.db.Note
-import com.slavetny.ampersand.mvp.NotesContract
-import com.slavetny.ampersand.mvp.presenter.EditorPresenter
-import com.slavetny.ampersand.mvp.presenter.NotesPresenter
+import com.slavetny.ampersand.NotesContract
+import com.slavetny.ampersand.presenter.EditorPresenter
 import kotlinx.android.synthetic.main.activity_editor.*
 
 class EditorActivity : AppCompatActivity(), NotesContract.NotesView.EditorView, View.OnClickListener {
@@ -25,8 +24,6 @@ class EditorActivity : AppCompatActivity(), NotesContract.NotesView.EditorView, 
 
         if (intent.getStringExtra("title") != null) {
             presenter?.getCurrentNote(intent.getStringExtra("title"))
-
-            saveButton.setImageResource(R.drawable.ic_update_48dp)
         }
 
         saveButton.setOnClickListener(this)
@@ -50,6 +47,8 @@ class EditorActivity : AppCompatActivity(), NotesContract.NotesView.EditorView, 
 
     override fun onBackPressed() {
         super.onBackPressed()
+
+        startActivity(Intent(this, NotesActivity::class.java))
 
         overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
     }

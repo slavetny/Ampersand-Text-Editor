@@ -1,7 +1,8 @@
-package com.slavetny.ampersand.mvp
+package com.slavetny.ampersand
 
 import android.content.Context
 import androidx.annotation.UiThread
+import com.slavetny.ampersand.NotesContract
 import com.slavetny.ampersand.db.Note
 import com.slavetny.ampersand.db.NoteDao
 import com.slavetny.ampersand.db.NoteDatabase
@@ -15,30 +16,50 @@ class NotesModel(val context: Context) : NotesContract.NotesModel {
     private var noteDao: NoteDao? = null
     private val viewModelScope = CoroutineScope(Dispatchers.IO)
 
+    override fun initDatabase() {
+        database = NoteDatabase.getNoteDatabase(context)
+
+        noteDao = database?.noteDao()
+    }
+
     override fun getNotesFromDb(onFinishedListener: NotesContract.NotesModel.OnNotesFinishedListener) {
         viewModelScope.launch {
-            getAllNotesFromDb(onFinishedListener)
+            onFinishedListener.onNotesFinished(noteDao?.getNotes())
+
+            onFinishedListener.onNotesFailure()
         }
     }
 
     override fun getNoteByTitle(onFinishedListener: NotesContract.NotesModel.OnNoteFinishedListener, title: String) {
         viewModelScope.launch {
-            getNoteByTitleFromDb(onFinishedListener, title)
+            onFinishedListener.onNoteFinished(noteDao!!.getNoteByTitle(title))
+
+            onFinishedListener.onNotesFailure()
         }
     }
 
     override fun addNote(title: String, text: String) {
         viewModelScope.launch {
-            addNoteToDb(title, text)
+            var note = Note(title, text)
+
+            noteDao?.insert(note)
+        }
+    }
+
+    override fun deleteNote(title: String) {
+        viewModelScope.launch {
+            var note = noteDao!!.getNoteByTitle(title)
+
+            try {
+                noteDao?.delete(note)
+            } catch (e: NullPointerException) {
+                e.fillInStackTrace()
+            }
         }
     }
 
     @UiThread
     fun getAllNotesFromDb(onFinishedListener: NotesContract.NotesModel.OnNotesFinishedListener) {
-        database = NoteDatabase.getNoteDatabase(context)
-
-        noteDao = database?.noteDao()
-
         onFinishedListener.onNotesFinished(noteDao?.getNotes())
 
         onFinishedListener.onNotesFailure()
@@ -46,10 +67,6 @@ class NotesModel(val context: Context) : NotesContract.NotesModel {
 
     @UiThread
     fun getNoteByTitleFromDb(onFinishedListener: NotesContract.NotesModel.OnNoteFinishedListener, title: String) {
-        database = NoteDatabase.getNoteDatabase(context)
-
-        noteDao = database?.noteDao()
-
         onFinishedListener.onNoteFinished(noteDao!!.getNoteByTitle(title))
 
         onFinishedListener.onNotesFailure()
@@ -57,10 +74,6 @@ class NotesModel(val context: Context) : NotesContract.NotesModel {
 
     @UiThread
     fun addNoteToDb(title: String, text: String) {
-        database = NoteDatabase.getNoteDatabase(context)
-
-        noteDao = database?.noteDao()
-
         var note = Note(title, text)
 
         noteDao?.insert(note)
