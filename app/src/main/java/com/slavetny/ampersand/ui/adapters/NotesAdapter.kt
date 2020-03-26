@@ -25,8 +25,6 @@ class NotesAdapter(var notesList: List<Note>?) : RecyclerView.Adapter<NotesAdapt
     }
 
     override fun onBindViewHolder(holder: NotesViewHolder, position: Int) {
-        holder.itemView.context.setTheme(R.style.DarkTheme)
-
         holder.bind(notesList!!.get(position))
 
         holder.itemView.setOnClickListener {

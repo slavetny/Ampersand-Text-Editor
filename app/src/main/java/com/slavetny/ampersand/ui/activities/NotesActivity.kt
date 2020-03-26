@@ -24,21 +24,14 @@ class NotesActivity : AppCompatActivity(), NotesContract.NotesView.MenuView, Not
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_notes)
 
         notesApp = NotesApp()
-
-        if (notesApp?.get()?.getTheme(this) == true)
-            setTheme(R.style.DarkTheme)
-        else
-            setTheme(R.style.WhiteTheme)
-
-        setContentView(R.layout.activity_notes)
 
         presenter = NotesPresenter(this, this)
         presenter?.getNotes()
 
         addNoteButton.setOnClickListener(this)
-        darkModeButton.setOnClickListener(this)
     }
 
     override fun showNotes(notesList: List<Note>?) {
@@ -86,19 +79,6 @@ class NotesActivity : AppCompatActivity(), NotesContract.NotesView.MenuView, Not
                 startActivity(Intent(this, EditorActivity::class.java))
 
                 finish()
-
-                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-            }
-
-            R.id.darkModeButton -> {
-                if (notesApp?.get()?.getTheme(this) == false)
-                    notesApp!!.get()?.setTheme(this, true)
-                else
-                    notesApp!!.get()?.setTheme(this, false)
-
-                finish()
-
-                startActivity(Intent(this, NotesActivity::class.java))
 
                 overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
             }

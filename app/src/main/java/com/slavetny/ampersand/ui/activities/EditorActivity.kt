@@ -20,15 +20,9 @@ class EditorActivity : AppCompatActivity(), NotesContract.NotesView.EditorView, 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_editor)
 
         notesApp = NotesApp()
-
-        if (notesApp?.get()?.getTheme(this) == true)
-            setTheme(R.style.DarkTheme)
-        else
-            setTheme(R.style.WhiteTheme)
-
-        setContentView(R.layout.activity_editor)
 
         presenter = EditorPresenter(this, this)
 
