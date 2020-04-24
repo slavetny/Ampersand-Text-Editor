@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.slavetny.ampersand.R
 import com.slavetny.ampersand.db.Note
+import com.slavetny.ampersand.utils.extensions.inflate
 import kotlinx.android.synthetic.main.note_item.view.*
 
 class NotesAdapter(var notesList: List<Note>?) : RecyclerView.Adapter<NotesAdapter.NotesViewHolder>() {
@@ -13,8 +14,8 @@ class NotesAdapter(var notesList: List<Note>?) : RecyclerView.Adapter<NotesAdapt
     private var onNoteClickedListener: OnNoteClickedListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        NotesViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.note_item, parent, false)
+        NotesViewHolder (
+            parent.inflate(R.layout.note_item)
         )
 
     override fun getItemCount() = notesList!!.size
