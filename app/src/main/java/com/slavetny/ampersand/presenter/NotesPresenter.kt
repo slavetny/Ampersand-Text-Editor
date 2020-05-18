@@ -5,15 +5,11 @@ import android.util.Log
 import com.slavetny.ampersand.db.Note
 import com.slavetny.ampersand.NotesContract
 import com.slavetny.ampersand.NotesModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
-class NotesPresenter(val view: NotesContract.NotesView.MenuView, var context: Context) : NotesContract.NotesPresenter.MenuPresenter, NotesContract.NotesModel.OnNotesFinishedListener {
+class NotesPresenter(private val view: NotesContract.NotesView.MenuView, var context: Context) : NotesContract.NotesPresenter.MenuPresenter, NotesContract.NotesModel.OnNotesFinishedListener {
 
     private var notesModel: NotesContract.NotesModel? = null
-    private val viewModelScope = CoroutineScope(Dispatchers.IO)
 
     override fun getNotes() {
         notesModel = NotesModel(context)
@@ -31,6 +27,7 @@ class NotesPresenter(val view: NotesContract.NotesView.MenuView, var context: Co
         notesModel?.deleteNote(title)
     }
 
+    @ExperimentalCoroutinesApi
     override fun onNotesFinished(notesList: List<Note>?) {
         MainScope().launch {
             view.showNotes(notesList)

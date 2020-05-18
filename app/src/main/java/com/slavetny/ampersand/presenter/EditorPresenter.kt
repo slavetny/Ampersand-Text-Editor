@@ -5,10 +5,11 @@ import android.util.Log
 import com.slavetny.ampersand.db.Note
 import com.slavetny.ampersand.NotesContract
 import com.slavetny.ampersand.NotesModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
-class EditorPresenter(val view: NotesContract.NotesView.EditorView, var context: Context) : NotesContract.NotesPresenter.EditorPresenter, NotesContract.NotesModel.OnNoteFinishedListener {
+class EditorPresenter(private val view: NotesContract.NotesView.EditorView, var context: Context) : NotesContract.NotesPresenter.EditorPresenter, NotesContract.NotesModel.OnNoteFinishedListener {
 
     private var notesModel: NotesContract.NotesModel? = null
 
@@ -28,9 +29,10 @@ class EditorPresenter(val view: NotesContract.NotesView.EditorView, var context:
         notesModel?.addNote(title, text)
     }
 
+    @ExperimentalCoroutinesApi
     override fun onNoteFinished(note: Note) {
         MainScope().launch {
-            view?.loadNote(note)
+            view.loadNote(note)
         }
     }
 

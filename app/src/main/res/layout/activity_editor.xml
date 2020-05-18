@@ -29,14 +29,6 @@
             android:textColorHint="@color/white"
             android:textColor="@color/white"/>
 
-        <ImageView
-            android:id="@+id/saveButton"
-            android:layout_width="32dp"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_save_48dp"
-            android:layout_gravity="center|right"
-            android:layout_marginRight="8dp" />
-
     </FrameLayout>
 
     <EditText

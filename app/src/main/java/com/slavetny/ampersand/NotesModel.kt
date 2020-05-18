@@ -1,8 +1,6 @@
 package com.slavetny.ampersand
 
 import android.content.Context
-import androidx.annotation.UiThread
-import com.slavetny.ampersand.NotesContract
 import com.slavetny.ampersand.db.Note
 import com.slavetny.ampersand.db.NoteDao
 import com.slavetny.ampersand.db.NoteDatabase
@@ -10,7 +8,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class NotesModel(val context: Context) : NotesContract.NotesModel {
+class NotesModel(private val context: Context) : NotesContract.NotesModel {
 
     private var database: NoteDatabase? = null
     private var noteDao: NoteDao? = null
@@ -40,7 +38,7 @@ class NotesModel(val context: Context) : NotesContract.NotesModel {
 
     override fun addNote(title: String, text: String) {
         viewModelScope.launch {
-            var note = Note(title, text)
+            val note = Note(title, text)
 
             noteDao?.insert(note)
         }
@@ -48,7 +46,7 @@ class NotesModel(val context: Context) : NotesContract.NotesModel {
 
     override fun deleteNote(title: String) {
         viewModelScope.launch {
-            var note = noteDao!!.getNoteByTitle(title)
+            val note = noteDao!!.getNoteByTitle(title)
 
             try {
                 noteDao?.delete(note)
@@ -56,26 +54,5 @@ class NotesModel(val context: Context) : NotesContract.NotesModel {
                 e.fillInStackTrace()
             }
         }
-    }
-
-    @UiThread
-    fun getAllNotesFromDb(onFinishedListener: NotesContract.NotesModel.OnNotesFinishedListener) {
-        onFinishedListener.onNotesFinished(noteDao?.getNotes())
-
-        onFinishedListener.onNotesFailure()
-    }
-
-    @UiThread
-    fun getNoteByTitleFromDb(onFinishedListener: NotesContract.NotesModel.OnNoteFinishedListener, title: String) {
-        onFinishedListener.onNoteFinished(noteDao!!.getNoteByTitle(title))
-
-        onFinishedListener.onNotesFailure()
-    }
-
-    @UiThread
-    fun addNoteToDb(title: String, text: String) {
-        var note = Note(title, text)
-
-        noteDao?.insert(note)
     }
 }

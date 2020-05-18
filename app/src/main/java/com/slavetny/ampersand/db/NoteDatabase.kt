@@ -4,8 +4,6 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.room.migration.Migration
-import androidx.sqlite.db.SupportSQLiteDatabase
 
 @Database(entities = [Note::class], version = 10)
 abstract class NoteDatabase : RoomDatabase() {
@@ -27,8 +25,8 @@ abstract class NoteDatabase : RoomDatabase() {
             return instance
         }
 
-        fun destroyDataBase(){
-            instance = null
-        }
+//        fun destroyDataBase(){
+//            instance = null
+//        }
     }
 }

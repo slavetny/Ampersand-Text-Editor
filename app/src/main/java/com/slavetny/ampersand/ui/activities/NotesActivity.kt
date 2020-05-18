@@ -35,15 +35,15 @@ class NotesActivity : AppCompatActivity(), NotesContract.NotesView.MenuView, Not
     }
 
     override fun showNotes(notesList: List<Note>?) {
-        var adapter = NotesAdapter(notesList)
+        val adapter = NotesAdapter(notesList)
 
         linearLayoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = linearLayoutManager
         recyclerView.adapter = adapter
 
-        initRecyclerViewSwipe(adapter, recyclerView, notesList)
+        initRecyclerViewSwipe(recyclerView, notesList)
 
-        adapter?.setOnNoteClickedListener(this)
+        adapter.setOnNoteClickedListener(this)
     }
 
     override fun noteClicked(title: String?) {
@@ -52,7 +52,7 @@ class NotesActivity : AppCompatActivity(), NotesContract.NotesView.MenuView, Not
         overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
     }
 
-    private fun initRecyclerViewSwipe(adapter: NotesAdapter, recyclerView: RecyclerView, notesList: List<Note>?) {
+    private fun initRecyclerViewSwipe(recyclerView: RecyclerView, notesList: List<Note>?) {
 
         val simpleItemTouchCallback: ItemTouchHelper.SimpleCallback = object :
             ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT or ItemTouchHelper.DOWN or ItemTouchHelper.UP) {
@@ -64,7 +64,7 @@ class NotesActivity : AppCompatActivity(), NotesContract.NotesView.MenuView, Not
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
                 val position = viewHolder.adapterPosition
 
-                presenter?.removeNote(notesList!!.get(position).title)
+                presenter?.removeNote(notesList!![position].title)
             }
         }
 
